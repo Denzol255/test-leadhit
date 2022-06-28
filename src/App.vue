@@ -1,15 +1,14 @@
 <template>
-  <v-app><HomeView /></v-app>
+  <v-app>
+    <router-view></router-view>
+  </v-app>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import HomeView from "./views/HomeView.vue";
 export default Vue.extend({
   name: "App",
-  components: {
-    HomeView,
-  },
+  components: {},
 
   data: () => ({
     //

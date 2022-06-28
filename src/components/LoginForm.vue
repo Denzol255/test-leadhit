@@ -10,7 +10,6 @@
             :counter="24"
             label="Введите ID"
             required
-            validate-on-blur
           ></v-text-field>
           <v-btn
             :disabled="!valid"
@@ -22,15 +21,20 @@
         </v-form>
       </v-col>
     </v-row>
+    <Transition name="slide-fade">
+      <v-alert v-if="getShowError" type="error">Указан неверный ID</v-alert>
+    </Transition>
   </v-container>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { IRequestData } from "../model/IRequestData";
+import { mapGetters, mapMutations } from "vuex";
 
 export default Vue.extend({
+  name: "Auth",
   data: () => ({
     valid: true,
     login: "",
@@ -39,7 +43,11 @@ export default Vue.extend({
       (v: string) => v.length === 24 || "ID должен быть равен 24 символам",
     ],
   }),
+  computed: {
+    ...mapGetters(["getShowError"]),
+  },
   methods: {
+    ...mapMutations(["setShowErrorTrue"]),
     handleClick(): void {
       this.validate();
       this.makeRequest();
@@ -59,12 +67,38 @@ export default Vue.extend({
         .then((response) => {
           if (response.data.message === "ok") {
             localStorage.setItem("leadhit-site-id", this.login);
+            this.$router.push("/analytics");
           }
-          // Прокинуть ошибку в catch, сделать обработку ошибок в catch, сделать перенаправление на аналитику
+          // Прокинуть ошибку в catch, сделать обработку ошибок в catch, сделать перенаправление на аналитику, переименовать страницу авторизации
+        })
+        .catch((e: AxiosError) => {
+          console.error(e.message);
+          this.setShowErrorTrue();
         });
     },
   },
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.v-alert {
+  position: absolute;
+  top: 10px;
+  right: 0;
+  transform: translateX(-20px);
+  transition: all 0.3s ease-out;
+}
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
+</style>
