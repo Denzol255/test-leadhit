@@ -6,6 +6,7 @@ import { AuthState } from "./types";
 
 const state: AuthState = {
   showError: false,
+  isButtonDisabled: false,
 };
 
 export const auth: Module<AuthState, RootState> = {

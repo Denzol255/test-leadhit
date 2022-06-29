@@ -36,8 +36,8 @@ export const setChart = (data: IAnalyticsData[]) => {
 
   const circleBullet = series.bullets.push(new am4charts.CircleBullet());
   circleBullet.circle.fill = am4core.color("#9300FA");
-  circleBullet.tooltipText = `Date: [bold]{date}[/] 
-  Visits: [bold]{visits}[/]`;
+  circleBullet.tooltipText = `Дата: [bold]{date}[/] 
+  Визиты: [bold]{visits}[/]`;
   circleBullet.cursorOverStyle = am4core.MouseCursorStyle.pointer;
   const circleBulletHover = circleBullet.states.create("hover");
   circleBulletHover.properties.scale = 1.3;

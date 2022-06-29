@@ -1,7 +1,5 @@
 <template>
-  <v-container>
-    <LoginForm />
-  </v-container>
+  <LoginForm />
 </template>
 
 <script lang="ts">

@@ -1,7 +1,5 @@
 <template>
-  <v-container>
-    <AnalyticsComponentVue />
-  </v-container>
+  <AnalyticsComponentVue />
 </template>
 
 <script lang="ts">

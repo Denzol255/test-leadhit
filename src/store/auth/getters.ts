@@ -4,4 +4,5 @@ import { AuthState } from "./types";
 
 export const getters: GetterTree<AuthState, RootState> = {
   getShowError: (state: AuthState) => state.showError,
+  getIsButtonDisabled: (state: AuthState) => state.isButtonDisabled,
 };

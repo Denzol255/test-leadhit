@@ -1,12 +1,12 @@
 <template>
   <v-container>
-    <h1>Аналитика</h1>
-    <div>
-      <h2>Аналитика по визитам</h2>
+    <h1 class="mb-4">Аналитика</h1>
+    <h2 class="ps-4 mb-4">Аналитика по визитам</h2>
+    <div v-if="getAnalyticsLoading" class="d-flex justify-center pt-10">
+      <Loader />
     </div>
-    <div v-if="getAnalyticsLoading">Loading...</div>
-    <div v-if="getAnalyticsError">
-      {{ $store.getters.getAnalyticsError }}
+    <div class="d-flex justify-center py-4 red--text" v-if="getAnalyticsError">
+      Ошибка при получении данных - {{ $store.getters.getAnalyticsError }}
     </div>
     <div id="chartdiv"></div>
   </v-container>
@@ -16,9 +16,13 @@
 import Vue from "vue";
 import { mapActions, mapGetters } from "vuex";
 import { disposeAllCharts } from "@amcharts/amcharts4/core";
+import Loader from "../components/Loader.vue";
 
 export default Vue.extend({
   name: "Analytics",
+  components: {
+    Loader,
+  },
   computed: {
     ...mapGetters([
       "getAnalyticsData",
@@ -29,9 +33,9 @@ export default Vue.extend({
   methods: {
     ...mapActions(["fetchAnalyticsData"]),
   },
-  async mounted() {
+  mounted() {
     if (localStorage.getItem("leadhit-site-id")) {
-      await this.fetchAnalyticsData();
+      this.fetchAnalyticsData();
     } else {
       this.$router.push("/");
     }

@@ -12,7 +12,7 @@
             required
           ></v-text-field>
           <v-btn
-            :disabled="!valid"
+            :disabled="!valid || getIsButtonDisabled"
             class="align-self-center"
             color="success"
             @click="handleClick"
@@ -21,7 +21,7 @@
         </v-form>
       </v-col>
     </v-row>
-    <Transition name="slide-fade">
+    <Transition name="error">
       <v-alert v-if="getShowError" type="error">Указан неверный ID</v-alert>
     </Transition>
   </v-container>
@@ -40,14 +40,19 @@ export default Vue.extend({
     login: "",
     loginRules: [
       (v: string) => !!v || "ID является обязательным",
-      (v: string) => v.length === 24 || "ID должен быть равен 24 символам",
+      (v: string) => v.length === 24 || "ID сайта должен содержать 24 символа",
     ],
   }),
   computed: {
-    ...mapGetters(["getShowError"]),
+    ...mapGetters(["getShowError", "getIsButtonDisabled"]),
   },
   methods: {
-    ...mapMutations(["setShowErrorTrue"]),
+    ...mapMutations([
+      "setShowErrorTrue",
+      "setShowErrorFalse",
+      "setIsButtonDisabledTrue",
+      "setIsButtonDisabledFalse",
+    ]),
     handleClick(): void {
       this.validate();
       this.makeRequest();
@@ -56,12 +61,12 @@ export default Vue.extend({
       (this.$refs.form as Vue & { validate: () => boolean }).validate();
     },
     makeRequest(): void {
+      this.setIsButtonDisabledTrue();
       axios
         .get<IRequestData>("https://track-api.leadhit.io/client/test_auth", {
           headers: {
             "Api-Key": "5f8475902b0be670555f1bb3:eEZn8u05G3bzRpdL7RiHCvrYAYo",
             "Leadhit-Site-Id": this.login,
-            // 5f8475902b0be670555f1bb3
           },
         })
         .then((response) => {
@@ -69,11 +74,14 @@ export default Vue.extend({
             localStorage.setItem("leadhit-site-id", this.login);
             this.$router.push("/analytics");
           }
-          // Прокинуть ошибку в catch, сделать обработку ошибок в catch, сделать перенаправление на аналитику, переименовать страницу авторизации
         })
         .catch((e: AxiosError) => {
           console.error(e.message);
           this.setShowErrorTrue();
+          setTimeout(() => {
+            this.setIsButtonDisabledFalse();
+            this.setShowErrorFalse();
+          }, 1500);
         });
     },
   },
@@ -84,21 +92,21 @@ export default Vue.extend({
 .v-alert {
   position: absolute;
   top: 10px;
-  right: 0;
-  transform: translateX(-20px);
-  transition: all 0.3s ease-out;
-}
-.slide-fade-enter-active {
+  right: 10px;
+
   transition: all 0.3s ease-out;
 }
 
-.slide-fade-leave-active {
-  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
-}
-
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-  transform: translateX(20px);
+.error-enter-active {
   opacity: 0;
+  transform: translateX(30px);
+}
+.error-leave-active {
+  transition: all 0.5s ease;
+}
+.error-enter-from,
+.error-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
 }
 </style>
