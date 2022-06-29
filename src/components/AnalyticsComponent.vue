@@ -41,6 +41,7 @@ export default Vue.extend({
     }
   },
   beforeDestroy() {
+    // Удаление всех графиков компонента
     disposeAllCharts();
   },
 });

@@ -1,6 +1,7 @@
 import { MutationTree } from "vuex";
 import { AuthState } from "./types";
 
+// Мутации для отображения ошибки, блокировки кнопки
 export const mutations: MutationTree<AuthState> = {
   setShowErrorTrue(state: AuthState) {
     state.showError = true;

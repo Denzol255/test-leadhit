@@ -3,7 +3,12 @@
     <h1>LeadHit</h1>
     <v-row justify="center">
       <v-col cols="4">
-        <v-form ref="form" v-model="valid" class="d-flex flex-column">
+        <v-form
+          ref="form"
+          v-on:submit.prevent="handleClick"
+          v-model="valid"
+          class="d-flex flex-column"
+        >
           <v-text-field
             v-model="login"
             :rules="loginRules"
@@ -53,13 +58,16 @@ export default Vue.extend({
       "setIsButtonDisabledTrue",
       "setIsButtonDisabledFalse",
     ]),
+    // Валидация поля ввода и создание запроса при клике на кнопку
     handleClick(): void {
       this.validate();
       this.makeRequest();
     },
+    // Валидация с ипользование vuetify
     validate(): void {
       (this.$refs.form as Vue & { validate: () => boolean }).validate();
     },
+    // Запрос на сервер и вывод ошибки при неверно ID
     makeRequest(): void {
       this.setIsButtonDisabledTrue();
       axios
@@ -71,6 +79,7 @@ export default Vue.extend({
         })
         .then((response) => {
           if (response.data.message === "ok") {
+            this.setIsButtonDisabledFalse();
             localStorage.setItem("leadhit-site-id", this.login);
             this.$router.push("/analytics");
           }

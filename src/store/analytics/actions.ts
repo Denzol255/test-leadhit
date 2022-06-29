@@ -5,6 +5,7 @@ import { ActionTree } from "vuex";
 import { RootState } from "../types";
 import { AnalyticsState } from "./types";
 
+// Запрос для получения данных для графика, отображение лоадера, отображение ошибки
 export const actions: ActionTree<AnalyticsState, RootState> = {
   fetchAnalyticsData: ({ commit }) => {
     setTimeout(async () => {

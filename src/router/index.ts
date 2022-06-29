@@ -14,17 +14,14 @@ const routes: Array<RouteConfig> = [
   {
     path: "/analytics",
     name: "analytics",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import("../views/AnalyticsView.vue"),
   },
   { path: "*", component: PageNotFound },
 ];
 
 const router = new VueRouter({
-  mode: "history",
-  base: process.env.BASE_URL,
+  mode: "hash",
+  base: "/test-leadhit/",
   routes,
 });
 

@@ -4,6 +4,7 @@ import am4lang_ru_RU from "@amcharts/amcharts4/lang/ru_RU";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import { IAnalyticsData } from "@/model/IAnalyticsData";
 
+// Функция создания графика
 export const setChart = (data: IAnalyticsData[]) => {
   am4core.useTheme(am4themes_animated);
 
